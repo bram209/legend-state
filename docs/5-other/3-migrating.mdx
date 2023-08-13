@@ -64,6 +64,51 @@ import { observer, reactive, reactiveObserver } from '@legendapp/state/react'
 /// <reference types="@legendapp/state/types/babel" />
 ```
 
+### Legend components changed to Reactive components
+
+The reactive components are now better named and more easily customizable with configuration functions, exported from the normal `/react` path. See [Render an observableselector directly](../configuring/#enablereactcomponents-enablereactnativecomponents) for more details.
+
+Change:
+```js
+import { Legend } from '@legendapp/state/react-components'
+function Component() {
+    return <Legend.div>...</Legend.div>
+}
+```
+
+To:
+```js
+// React
+import { enableReactComponents } from "@legendapp/state/config/enableReactComponents"
+enableReactComponents()
+
+// React Native
+import { enableReactNativeComponents } from "@legendapp/state/config/enableReactNativeComponents"
+enableReactNativeComponents()
+
+// Now you can use them anywhere
+import { Reactive } from '@legendapp/state/react'
+
+function Component() {
+    return <Reactive.div>...</Reactive.div>
+}
+```
+
+```jsx
+function Component() {
+    const text$ = useObservable('test')
+    return (
+        <Reactive.div
+            // Change this
+            className$={() => '...'}
+            // to this
+            $className={() => '...'}
+        >...
+        </Reactive.div>
+    )
+}
+```
+
 ## 0.23 to 1.0
 
 ### onChange changed
