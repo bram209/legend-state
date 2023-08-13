@@ -4,14 +4,9 @@ import { useSelector } from './useSelector';
 
 import type { BindKeys } from './reactInterfaces';
 
-type ShapeWithOld$<T> = {
-    [K in keyof T as K extends `${string & K}$` ? K : `${string & K}$`]?: Selector<T[K]>;
+export type ShapeWith$<T> = Partial<T> & {
+    [K in keyof T as K extends `$${string & K}` ? K : `$${string & K}`]?: Selector<T[K]>;
 };
-// TODOV2: Remove ShapeWithOld
-export type ShapeWith$<T> = Partial<T> &
-    ShapeWithOld$<T> & {
-        [K in keyof T as K extends `$${string & K}` ? K : `$${string & K}`]?: Selector<T[K]>;
-    };
 
 export type ObjectShapeWith$<T> = {
     [K in keyof T]: T[K] extends FC<infer P> ? FC<ShapeWith$<P>> : T[K];
@@ -76,16 +71,7 @@ function createReactiveComponent<P = object>(
                         props[key] = useSelector(p);
                     }
                     // Convert reactive props
-                    // TODOV2 Remove the deprecated endsWith option and also remove the types
-                    else if (key.startsWith('$') || key.endsWith('$')) {
-                        if (process.env.NODE_ENV === 'development' && key.endsWith('$')) {
-                            console.warn(
-                                `[legend-state] Reactive props will be changed to start with $ instead of end with $ in version 2.0. So please change ${key} to $${key.replace(
-                                    '$',
-                                    '',
-                                )}. See https://legendapp.com/open-source/state/migrating for more details.`,
-                            );
-                        }
+                    else if (key.startsWith('$')) {
                         const k = key.endsWith('$') ? key.slice(0, -1) : key.slice(1);
                         // Return raw value and listen to the selector for changes
                         propsOut[k] = useSelector(p);
