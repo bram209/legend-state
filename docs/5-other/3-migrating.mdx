@@ -40,6 +40,30 @@ function Component() {
 }
 ```
 
+### observer, reactive, reactiveObserver not exported from react-components
+
+The `/react-components` export was mistakenly exporting `observer`, `reactive`, and `reactiveObserver` which are already exported from `/react`. Your editor may have automatically imported from `/react-components` so may need to be changed.
+
+```jsx
+// Change this:
+import { observer, reactive, reactiveObserver } from '@legendapp/state/react-components'
+// To this:
+import { observer, reactive, reactiveObserver } from '@legendapp/state/react'
+```
+
+### types.d.ts moved to types/babel.d.ts
+
+"types.d.ts" was too generic of a name now that we have a lot of configuration options, so we are naming them more specifically in a "types" folder.
+
+
+```js
+// Change this:
+/// <reference types="@legendapp/state/types" />
+
+// To this:
+/// <reference types="@legendapp/state/types/babel" />
+```
+
 ## 0.23 to 1.0
 
 ### onChange changed
