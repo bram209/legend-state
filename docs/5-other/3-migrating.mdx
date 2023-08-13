@@ -109,6 +109,25 @@ function Component() {
 }
 ```
 
+### afterBatch removed
+
+`afterBatch` was not working 100% correctly in all cases, and the best way to fix it was to make it part of `batch(...)`.
+
+```js
+// Change
+beginBatch();
+afterBatch(() => { console.log('done') })
+obs$.set(true)
+endBatch()
+
+// To
+batch(() => {
+    obs$.set(true)
+}, () => {
+    console.log('done')
+})
+```
+
 ## 0.23 to 1.0
 
 ### onChange changed
